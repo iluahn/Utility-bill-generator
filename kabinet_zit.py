@@ -10,8 +10,9 @@ class KabZitUser():
         self.username = username
         self.psw = psw
         self.token = self.get_token()
-        self.debt = self.get_amount()
-        self.logout()
+        if self.token is not None:
+            self.debt = self.get_amount()
+            self.logout()
 
 
     def get_token(self):
@@ -23,11 +24,14 @@ class KabZitUser():
 
         response = requests.request("POST", url, headers=headers, data=payload)
         response_dict = json.loads(response.text)
-        print(response_dict)
-        token = response_dict["_token"]
-        return token
+        try:
+            token = response_dict["_token"]
+            return token
+        except KeyError:
+            print("Кабинет-жителя.рф: ", response_dict)
+            return None
+        
     
-
     def get_amount(self):
         """"GET-запрос на получение информации о текущем долге"""
         url = BASE_KAB + "api/v4/cabinet/notices/?sectors=rent"
