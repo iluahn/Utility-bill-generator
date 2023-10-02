@@ -13,6 +13,8 @@ class KabZitUser():
         if self.token is not None:
             self.debt = self.get_amount()
             self.logout()
+        else:
+            self.debt = None
 
 
     def get_token(self):

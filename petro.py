@@ -15,6 +15,8 @@ class PetroUser():
             self.account_id = self.get_account_id()
             self.debt = self.get_debt()
             self.logout()
+        else:
+            self.debt = None
 
 
     def set_tokens(self): 
