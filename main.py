@@ -1,8 +1,8 @@
+import os
+from dotenv import load_dotenv
 from kabinet_zit import KabZitUser
 from petro import PetroUser
 
-
-FILE_PATH = "C:\\Users\\Public\\common.txt"
 
 def append_to_file(debt, debt_name, file_path):
     """Запись долга в файл в соответствии с заданным форматом"""
@@ -10,7 +10,7 @@ def append_to_file(debt, debt_name, file_path):
         f.write(f"{debt} {debt_name}\n")
 
 
-def generate_check(kab_user, petro_user, file_path=FILE_PATH):
+def generate_check(kab_user, petro_user, file_path):
     """Формирование чека. Разбито по категориям: ку, электричество и интернет (с фиксированной суммой 400). 
     В конце приводится итоговая сумма, которая считается только если получено оба значения долга (помимо интернета)"""
     open(file_path, "w").close()
@@ -27,11 +27,7 @@ def generate_check(kab_user, petro_user, file_path=FILE_PATH):
 if __name__ == "__main__":
     """Создаем экземпляры классов пользователя Кабинет-жителя и Петроэлектросбыт. Необходимые атрибуты устанавливаются в конструкторе. 
     Если залогиниться не удается, атрибуты-токены будут установлены как None, а атрибут с долгом не будет установлен."""
-    kab_user = KabZitUser("LOGIN", "PASSWORD") # LOGIN и PASSWORD должны быть заменены
-    petro_user = PetroUser("PHONE", "LOGIN", "PASSWORD") # LOGIN_TYPE, LOGIN и PASSWORD должны быть заменены
-
-    generate_check(kab_user, petro_user)
-
-    
-
-
+    load_dotenv()
+    kab_user = KabZitUser(os.environ.get("KABINET_LOGIN"), os.environ.get("KABINET_PSW"))
+    petro_user = PetroUser(os.environ.get("PETRO_LOGINTYPE"), os.environ.get("PETRO_LOGIN"), os.environ.get("PETRO_PSW"))
+    generate_check(kab_user, petro_user, os.environ.get("FILE_PATH"))
