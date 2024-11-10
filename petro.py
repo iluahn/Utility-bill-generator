@@ -56,13 +56,12 @@ class PetroUser():
 
     def get_debt(self):
         """GET-запрос на получение суммы долга (сумма двух показателей)"""
-        url = BASE_IKUS + f"api/v6/accounts/{self.account_id}/payments/at/current/amount/discretion"
+        url = BASE_IKUS + f"api/v8/accounts/{self.account_id}/payments/bills/current"
         headers = {"Authorization": f"Bearer {self.auth_token}"}
         payload = {}
         response = requests.request("GET", url, headers=headers, data=payload)
         response_dict = json.loads(response.text)
-        debt_ammount = float(response_dict[0]["charge"]["accrued"]) + float(response_dict[1]["charge"]["accrued"])
-        return debt_ammount
+        return response_dict["amount"]
     
 
     def logout(self):
