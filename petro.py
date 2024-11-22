@@ -55,13 +55,18 @@ class PetroUser():
         
 
     def get_debt(self):
-        """GET-запрос на получение суммы долга (сумма двух показателей)"""
-        url = BASE_IKUS + f"api/v8/accounts/{self.account_id}/payments/bills/current"
+        """GET-запрос на получение суммы долга (сумма показателей с ключом "checked" равным true)"""
+        url = BASE_IKUS + f"api/v7/accounts/{self.account_id}/payments/at/current/amount/discretion"
         headers = {"Authorization": f"Bearer {self.auth_token}"}
         payload = {}
         response = requests.request("GET", url, headers=headers, data=payload)
         response_dict = json.loads(response.text)
-        return response_dict["amount"]
+        debt_ammount: float = 0
+        # платежи по типу "добровольное страхование" (с checked равным false) не приплюсовываются
+        for payment in response_dict:
+            if payment["checked"]:
+                debt_ammount += float(payment["charge"]["accrued"])
+        return debt_ammount
     
 
     def logout(self):
