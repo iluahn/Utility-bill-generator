@@ -11,16 +11,16 @@ def append_to_file(debt, debt_name, file_path):
 
 
 def generate_check(kab_user, petro_user, file_path):
-    """Формирование чека. Разбито по категориям: ку, электричество и интернет (с фиксированной суммой 400). 
+    """Формирование чека. Разбито по категориям: ку, электричество и интернет (с фиксированной суммой 450). 
     В конце приводится итоговая сумма, которая считается только если получено оба значения долга (помимо интернета)"""
     open(file_path, "w").close()
     append_to_file(kab_user.debt, "ку", file_path)
     append_to_file(petro_user.debt, "электричество", file_path)
-    append_to_file(400, "интернет", file_path)
+    append_to_file(450, "интернет", file_path)
     if(kab_user.debt is None or petro_user.debt is None):
         append_to_file("\nInfo:", "получена не вся информация, проверьте вывод консоли\n", file_path)
     else:
-        append_to_file("\nИтого", str(kab_user.debt + petro_user.debt + 400) + "\n", file_path)
+        append_to_file("\nИтого", str(kab_user.debt + petro_user.debt + 450) + "\n", file_path)
 
 
 
